@@ -1,0 +1,1 @@
+dist/ina_speech_segmenter/ina_speech_segmenter  -i ../../../teste_sons/voice/205927__toiletrolltube__ws-20116-female-voices.wav -o .

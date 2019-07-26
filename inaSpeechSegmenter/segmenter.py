@@ -25,11 +25,13 @@
 
 
 import os
+import sys
 import tempfile
 from subprocess import Popen, PIPE
 import numpy as np
 import keras
 import shutil
+import platform
 
 from skimage.util import view_as_windows as vaw
 
@@ -127,7 +129,11 @@ class Segmenter:
         """
         Load neural network models
         """
-        p = os.path.dirname(os.path.realpath(__file__)) + '/'
+        if getattr(sys, 'frozen', False):
+            # we are running in a bundle
+            p = sys._MEIPASS + '/'
+        else:
+            p = os.path.dirname(os.path.realpath(__file__)) + '/'
         self.sznn = keras.models.load_model(p + 'keras_speech_music_cnn.hdf5')
         self.gendernn = keras.models.load_model(p + 'keras_male_female_cnn.hdf5')      
 
@@ -161,7 +167,11 @@ class Segmenter:
         slower than segmentwav method
         """
         if shutil.which(ffmpeg) is None:
-            raise(Exception("""ffmpeg program not found"""))
+            if platform.system() == "Windows" and getattr(sys, 'frozen', False):
+                # we are running in a bundle
+                ffmpeg = sys._MEIPASS + '/ffmpeg.exe'
+            else:
+                raise(Exception("""ffmpeg program not found"""))
         
         base, _ = os.path.splitext(os.path.basename(medianame))
 
