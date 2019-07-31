@@ -129,11 +129,11 @@ class Segmenter:
         """
         Load neural network models
         """
-        if getattr(sys, 'frozen', False):
-            # we are running in a bundle
-            p = sys._MEIPASS + '/'
-        else:
-            p = os.path.dirname(os.path.realpath(__file__)) + '/'
+        # if getattr(sys, 'frozen', False):
+        #     # we are running in a bundle
+        #     p = sys._MEIPASS + '/'
+        # else:
+        p = os.path.dirname(os.path.realpath(__file__)) + '/'
         self.sznn = keras.models.load_model(p + 'keras_speech_music_cnn.hdf5')
         self.gendernn = keras.models.load_model(p + 'keras_male_female_cnn.hdf5')      
 
@@ -166,22 +166,24 @@ class Segmenter:
         do segmentation on any kind on media file, including urls
         slower than segmentwav method
         """
-        if shutil.which(ffmpeg) is None:
-            if platform.system() == "Windows" and getattr(sys, 'frozen', False):
-                # we are running in a bundle
-                ffmpeg = sys._MEIPASS + '/ffmpeg.exe'
-            else:
-                raise(Exception("""ffmpeg program not found"""))
+        # if shutil.which(ffmpeg) is None:
+        #     if platform.system() == "Windows" and getattr(sys, 'frozen', False):
+        #         # we are running in a bundle
+        #         ffmpeg = sys._MEIPASS + '/ffmpeg.exe'
+        #     else:
+        #         raise(Exception("""ffmpeg program not found"""))
         
-        base, _ = os.path.splitext(os.path.basename(medianame))
+        #will run ffmpeg in autopsy module
+        return self.segmentwav(medianame)
+        # base, _ = os.path.splitext(os.path.basename(medianame))
 
-        with tempfile.TemporaryDirectory(dir=tmpdir) as tmpdirname:
-            tmpwav = tmpdirname + '/' + base + '.wav'
-            args = [ffmpeg, '-y', '-i', medianame, '-ar', '16000', '-ac', '1', tmpwav]
-            p = Popen(args, stdout=PIPE, stderr=PIPE)
-            output, error = p.communicate()
-            assert p.returncode == 0, error
-            return self.segmentwav(tmpwav)
+        # with tempfile.TemporaryDirectory(dir=tmpdir) as tmpdirname:
+        #     tmpwav = tmpdirname + '/' + base + '.wav'
+        #     args = [ffmpeg, '-y', '-i', medianame, '-acodec', 'pcm_s16le', '-ar', '16000', '-ac', '1', '-vn', '-sn', tmpwav]
+        #     p = Popen(args, stdout=PIPE, stderr=PIPE)
+        #     output, error = p.communicate()
+        #     assert p.returncode == 0, error
+        #     return self.segmentwav(tmpwav)
 
 def seg2csv(lseg, fout=None):
     if fout is None:
