@@ -95,7 +95,7 @@ setup(
     author_email = "david.doukhan@gmail.com",
     description = DESCRIPTION,
     license = "MIT",
-    install_requires=['numpy', 'keras', 'scikit-image', 'sidekit==1.2.4', 'pyannote.algorithms'],
+    install_requires=['numpy==1.16.2', 'keras', 'scikit-image', 'sidekit==1.2.4', 'pyannote.algorithms'],
  #   keywords = "example documentation tutorial",
     url = "https://github.com/ina-foss/inaSpeechSegmenter",
 #    packages=['inaSpeechSegmenter'],
