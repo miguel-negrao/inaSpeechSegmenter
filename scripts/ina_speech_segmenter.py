@@ -66,6 +66,14 @@ assert os.access(odir, os.W_OK), 'Directory %s is not writable!' % odir
 # Do processings
 from inaSpeechSegmenter import Segmenter, seg2csv
 
+import tensorflow as tf
+from tensorflow.compat.v1.keras.backend import set_session
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+config.log_device_placement = True
+sess = tf.compat.v1.Session(config=config)
+set_session(sess)
+
 # load neural network into memory, may last few seconds
 detect_gender = bool(distutils.util.strtobool(args.detect_gender))
 seg = Segmenter(vad_engine=args.vad_engine, detect_gender=detect_gender, ffmpeg=args.ffmpeg_binary)
