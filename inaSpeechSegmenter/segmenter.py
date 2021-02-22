@@ -195,8 +195,8 @@ class Segmenter:
         """      
 
         # test ffmpeg installation
-        if shutil.which(ffmpeg) is None:
-            raise(Exception("""ffmpeg program not found"""))
+        #if shutil.which(ffmpeg) is None:
+        #    raise(Exception("""ffmpeg program not found"""))
         self.ffmpeg = ffmpeg
 
 #        self.graph = KB.get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
