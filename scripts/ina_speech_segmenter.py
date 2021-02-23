@@ -40,6 +40,7 @@ Detailled description of this framework is presented in the following study:
 Doukhan, D., Carrive, J., Vallet, F., Larcher, A., & Meignier, S. (2018, April). An open-source speaker gender detection framework for monitoring gender equality. In 2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5214-5218). IEEE.
 """
 
+print("inaSpeechSegmenter bundled in AutopsySpeechToText starting.\n")
 
 # Configure command line parsing
 parser = argparse.ArgumentParser(description=description, epilog=epilog)

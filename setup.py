@@ -98,7 +98,7 @@ setup(
     test_suite="run_tests.py",
     description = DESCRIPTION,
     license = "MIT",
-    install_requires=['numpy', 'pandas', 'keras', 'scikit-image', 'sidekit==1.3.6.1', 'pyannote.algorithms', 'pyannote.core', 'pyannote.parser', 'matplotlib', 'Pyro4'],
+    install_requires=['numpy', 'pandas', 'keras', 'scikit-image', 'sidekit==1.3.6.1', 'pyannote.algorithms', 'pyannote.core', 'pyannote.parser', 'matplotlib'],
  #   keywords = "example documentation tutorial",
     url = "https://github.com/ina-foss/inaSpeechSegmenter",
 #    packages=['inaSpeechSegmenter'],
@@ -110,7 +110,7 @@ setup(
     long_description=LONGDESCRIPTION,
     long_description_content_type='text/markdown',
     scripts=[os.path.join('scripts', script) for script in \
-             ['ina_speech_segmenter.py', 'ina_speech_segmenter_pyro_client.py', 'ina_speech_segmenter_pyro_server.py', 'ina_speech_segmenter_pyro_client_setjobs.py']],
+             ['ina_speech_segmenter.py']],
     classifiers=CLASSIFIERS,
     python_requires='>=3.6',
 )
