@@ -44,7 +44,8 @@ print("inaSpeechSegmenter bundled in AutopsySpeechToText starting.\n")
 
 # Configure command line parsing
 parser = argparse.ArgumentParser(description=description, epilog=epilog)
-parser.add_argument('-i', '--input', nargs='+', help='Input media to analyse. May be a full path to a media (/home/david/test.mp3), a list of full paths (/home/david/test.mp3 /tmp/mymedia.avi), a regex input pattern ("/home/david/myaudiobooks/*.mp3"), an url with http protocol (http://url_of_the_file)', required=True)
+parser.add_argument('-i', '--input', nargs='+', help='Input media to analyse. May be a full path to a media (/home/david/test.mp3), a list of full paths (/home/david/test.mp3 /tmp/mymedia.avi), a regex input pattern ("/home/david/myaudiobooks/*.mp3"), an url with http protocol (http://url_of_the_file)')
+parser.add_argument('-f', '--input_file', help='file with list of input media to analyse.')
 parser.add_argument('-o', '--output_directory', help='Directory used to store segmentations. Resulting segmentations have same base name as the corresponding input media, with csv extension. Ex: mymedia.MPG will result in mymedia.csv', required=True)
 parser.add_argument('-d', '--vad_engine', choices=['sm', 'smn'], default='smn', help="Voice activity detection (VAD) engine to be used (default: 'smn'). 'smn' split signal into 'speech', 'music' and 'noise' (better). 'sm' split signal into 'speech' and 'music' and do not take noise into account, which is either classified as music or speech. Results presented in ICASSP were obtained using 'sm' option")
 parser.add_argument('-g', '--detect_gender', choices = ['true', 'false'], default='True', help="(default: 'true'). If set to 'true', segments detected as speech will be splitted into 'male' and 'female' segments. If set to 'false', segments corresponding to speech will be labelled as 'speech' (faster)")
@@ -52,13 +53,23 @@ parser.add_argument('-b', '--ffmpeg_binary', default='ffmpeg', help='Your custom
 
 args = parser.parse_args()
 
+
 # Preprocess arguments and check their consistency
-input_files = []
-for e in args.input:
-    if e.startswith("http"):
-        input_files += [e]
+if args.input_file is not None:
+    with open(args.input_file) as f:
+        input_files = f.read().splitlines()
+else:
+    if args.input_file is not None:
+        input_files = []
+        for e in args.input:
+            if e.startswith("http"):
+                input_files += [e]
+            else:
+                input_files += glob.glob(e)
     else:
-        input_files += glob.glob(e)
+        print("Must pass --input ou --input-file option")
+        exit(1)
+        
 assert len(input_files) > 0, 'No existing media selected for analysis! Bad values provided to -i (%s)' % args.input
 
 odir = args.output_directory.strip(" \t\n\r").rstrip('/')
